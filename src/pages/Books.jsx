@@ -1,18 +1,26 @@
 import React, { useState, useContext } from 'react';
 import Navbar from '../components/Navbar';
 import CartContext from '../contexts/CartContext';
+import { useSearchParams } from 'react-router-dom';
 
 
 export default function Books() {
     const { addToCart, addToWishlist } = useContext(CartContext);
 
     const [ searchTerm, setSearchTerm] = useState("");
+    const [ searchParams ] = useSearchParams();   
+
+    const [ selectedCategory, setSelectedCategory ] = useState(
+        searchParams.get("category") || "All"
+    );
+
 
     const books = [
   {
     id: 1,
     title: "Mrutyunjay",
     author: "Shivaji Sawant",
+    category: "Mythological Fiction",
     image: "https://www.majesticreaders.com/thumb/booksimg/450/600/14016/140160_PIC_1614492711.jpg",
     price: 459,
   },
@@ -20,6 +28,7 @@ export default function Books() {
     id: 2,
     title: "Yayati",
     author: "V. S. Khandekar",
+    category: "Mythological Fiction",
     image: "https://m.media-amazon.com/images/I/41pYblF83EL._AC_UF1000,1000_QL80_.jpg",
     price: 232,
   },
@@ -27,6 +36,7 @@ export default function Books() {
     id: 3,
     title: "Shriman Yogi",
     author: "Ranjit Desai",
+    category: "Historical Fiction",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcTWR_z24PP0FjlGKdlMRgYtqFxEWiH8fFc3-WnBeuqi1CZK-4V_0hA0nC&s=10",
     price: 740,
   },
@@ -34,13 +44,19 @@ export default function Books() {
     id: 4,
     title: "Shyamchi Aai",
     author: "Sane Guruji",
+    category: "Autobiographical Literature",
     image: "https://m.media-amazon.com/images/I/51IPv0Ps+wL._AC_UF1000,1000_QL80_.jpg",
     price: 150,
   },
 ];
 
-const filteredBooks = books.filter((book) =>
-  book.title.toLowerCase().includes(searchTerm.toLowerCase())
+const filteredBooks = books.filter((book) => {
+  const matchesSearch = book.title.toLowerCase().includes(searchTerm.toLowerCase());
+  const matchesCategory = selectedCategory === "All" || book.category === selectedCategory;
+
+  return matchesCategory && matchesSearch;
+
+}
 );
 
     return ( <>
@@ -52,15 +68,24 @@ const filteredBooks = books.filter((book) =>
 
         </div>
         <div className="row mb-3">
-            <div className='col-md-6'>
-            <input
-                type="text"
-                className="form-control form-control-lg rounded-3"
-                placeholder="Search books..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
-        </div>
+    <div className="col-md-6">
+        <input
+            type="text"
+            className="form-control form-control-lg rounded-3"
+            placeholder="Search books..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+        />
+    </div>
+</div>
+        <div className='d-flex flex-wrap gap-2 mb-4'>
+            {
+                [
+                    "All", "Mythological Fiction", "Historical Fiction", "Autobiographical Literature"
+                ].map((category) => (
+                    <button key={category} className={`btn ${selectedCategory === category ? "btn-primary" : "btn-outline-primary"}`} onClick={() => setSelectedCategory(category)}>{category}</button>
+                ))
+            }
         </div>
         <div className="row">
             {

@@ -1,5 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSearchParams  } from "react-router-dom";
+
 export default function Home() {
+
+  const navigate = useNavigate();
+  
     return (<> 
     {/* hero section */}
     <section className="bg-light py-5">
@@ -12,35 +17,51 @@ export default function Home() {
         </div>
         </section>
 
-        {/* Book categories section */}
-        <section className="container my-5">
-  <h2 className="text-center mb-4">Book Categories</h2>
+        {/* Book Categories Section */}
+<section className="container my-5">
+    <h2 className="text-center mb-4">Book Categories</h2>
 
-  <div className="row g-3">
-    <div className="col-md-3">
-      <div className="card p-4 text-center">
-        <h5>Fiction</h5>
-      </div>
-    </div>
+    <div className="row g-3">
+        <div className="col-md-3">
+            <div
+                className="card p-4 text-center h-100"
+                role="button"
+                onClick={() => navigate("/books?category=All")}
+            >
+                <h5>All Books</h5>
+            </div>
+        </div>
 
-    <div className="col-md-3">
-      <div className="card p-4 text-center">
-        <h5>Self-Help</h5>
-      </div>
-    </div>
+        <div className="col-md-3">
+            <div
+                className="card p-4 text-center h-100"
+                role="button"
+                onClick={() => navigate("/books?category=Mythological%20Fiction")}
+            >
+                <h5>Mythological Fiction</h5>
+            </div>
+        </div>
 
-    <div className="col-md-3">
-      <div className="card p-4 text-center">
-        <h5>Business</h5>
-      </div>
-    </div>
+        <div className="col-md-3">
+            <div
+                className="card p-4 text-center h-100"
+                role="button"
+                onClick={() => navigate("/books?category=Historical%20Fiction")}
+            >
+                <h5>Historical Fiction</h5>
+            </div>
+        </div>
 
-    <div className="col-md-3">
-      <div className="card p-4 text-center">
-        <h5>Personal Development</h5>
-      </div>
+        <div className="col-md-3">
+            <div
+                className="card p-4 text-center h-100"
+                role="button"
+                onClick={() => navigate("/books?category=Autobiographical%20Literature")}
+            >
+                <h5>Autobiographical Literature</h5>
+            </div>
+        </div>
     </div>
-  </div>
 </section>
 
 {/* Featured Books Section */}

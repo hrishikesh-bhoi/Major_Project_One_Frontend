@@ -13,6 +13,7 @@ import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
 import BookDetails from './pages/BookDetails';
 import Wishlist from './pages/Wishlist';
+import Login from './pages/Login.jsx'
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: "/wishlist",
     element: <Wishlist />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   }
 
 ]);
