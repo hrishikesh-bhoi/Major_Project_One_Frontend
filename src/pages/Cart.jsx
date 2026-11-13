@@ -5,11 +5,11 @@ import CartContext from '../contexts/CartContext';
 
 export default function Cart() {
 
-    const { cart, removeFromCart } = useContext(CartContext);
+    const { cart, removeFromCart, updateQuantity } = useContext(CartContext);
 
-    const totalPrice = cart.reduce((total, book) => total + book.price, 0);
+    const totalPrice = cart.reduce((total, book) => total + Number(book.price) * (book.quantity || 1), 0);
 
-    const totalBooks = cart.length;
+    const totalBooks = cart.reduce((total, book) => total + (book.quantity || 1) ,0)
 
     return ( <>
     <Navbar />
@@ -52,7 +52,14 @@ export default function Cart() {
                             <div className='flex-grow-1'>
                         <h5 className='fw-bold'>{book.title}</h5>
                         <p className='text-muted mb-2'>Author: {book.author}</p>
-                        <h5 className='text-primary fw-bold'>Price: ₹{book.price.toFixed(2)}</h5>
+                        <div className='d-flex align-items-center gap-3 my-3'>
+                            <span className='fw-bold'>Quantity:</span>
+                            <button className='btn btn-outline-secondary btn-sm' onClick={() => updateQuantity(book.id, -1)}>-</button>
+                            <span className='fw-bold'>{book.quantity || 1}</span>
+                            <button className='btn btn-outline-secondary btn-sm' onClick={() => updateQuantity(book.id, 1)}>+</button>
+                        </div>
+                        <h5 className='text-primary fw-bold'>Price: ₹{Number(book.price.toFixed(2))}</h5>
+                        <h6 className="fw-bold text-success">Subtotal: ₹{(Number(book.price) * (book.quantity || 1)).toFixed(2)}</h6>
                             </div>
                         <button className='btn btn-danger' onClick={() => removeFromCart(index)}>Remove</button>
                        

@@ -19,46 +19,80 @@ export default function Home() {
 
         {/* Book Categories Section */}
 <section className="container my-5">
-    <h2 className="text-center mb-4">Book Categories</h2>
+    <h2 className="text-center fw-bold mb-4">Book Categories</h2>
 
-    <div className="row g-3">
+    <div className="row g-4">
         <div className="col-md-3">
             <div
-                className="card p-4 text-center h-100"
+                className="card h-100 shadow-sm border-0"
                 role="button"
                 onClick={() => navigate("/books?category=All")}
             >
-                <h5>All Books</h5>
+              <img
+              src="https://images.unsplash.com/photo-1512820790803-83ca734da794"
+              className="card-img-top"
+              alt="All Books"
+              style={{height:"180px", objectFit:"cover" }}
+               />
+              <div className="card-body text-center">
+                <h5 className="fw-bold">All Books</h5>
+              </div>
             </div>
         </div>
 
         <div className="col-md-3">
             <div
-                className="card p-4 text-center h-100"
+                className="card h-100 shadow-sm border-0"
                 role="button"
                 onClick={() => navigate("/books?category=Mythological%20Fiction")}
             >
-                <h5>Mythological Fiction</h5>
+              <img
+              src="https://images.unsplash.com/photo-1544947950-fa07a98d237f"
+              className="card-img-top"
+              alt="Mythological Fiction"
+              style={{height:"180px", objectFit:"cover"}}
+               />
+              <div className="card-body text-center">
+
+                <h5 className="fw-bold">Mythological Fiction</h5>
+              </div>
             </div>
         </div>
 
         <div className="col-md-3">
             <div
-                className="card p-4 text-center h-100"
+                className="card h-100 shadow-sm border-0"
                 role="button"
                 onClick={() => navigate("/books?category=Historical%20Fiction")}
             >
+              <img
+              src="https://images.unsplash.com/photo-1461360370896-922624d12aa1"
+              className="card-img-top"
+              alt="Historical Fiction"
+              style={{height:"180px", objectFit:"cover"}}
+              />
+              <div className="card-body text-center">
                 <h5>Historical Fiction</h5>
+              </div>
             </div>
         </div>
 
         <div className="col-md-3">
             <div
-                className="card p-4 text-center h-100"
+                className="card h-100 shadow-sm border-0"
                 role="button"
                 onClick={() => navigate("/books?category=Autobiographical%20Literature")}
             >
+              <img
+              src="https://images.unsplash.com/photo-1507842217343-583bb7270b66"
+              className="card-img-top"
+              alt="Autobiographical Literature"
+              style={{height:"180px", objectFit:"cover"}}
+              />
+              <div className="card-body text-center">
                 <h5>Autobiographical Literature</h5>
+
+              </div>
             </div>
         </div>
     </div>

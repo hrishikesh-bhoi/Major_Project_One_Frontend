@@ -24,9 +24,23 @@ useEffect(() => {
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
 }, [wishlist]);
 
-    const addToCart = (book) => {
-        setCart([...cart, book]);
-    };
+   const addToCart = (book, quantity = 1) => {
+    setCart((previousCart) => {
+        const existingBook = previousCart.find(
+            (item) => item.id === book.id
+        );
+
+        if (existingBook) {
+            return previousCart.map((item) =>
+                item.title === book.title
+                    ? { ...item, quantity: (item.quantity || 1) + quantity }
+                    : item
+            );
+        }
+
+        return [...previousCart, { ...book, quantity}];
+    });
+};
 
     const addToWishlist = (book) => {
     setWishlist((previousWishlist) => {
@@ -42,6 +56,17 @@ useEffect(() => {
     });
 };
 
+const updateQuantity = (bookId, change) => {
+    setCart((previousCart) => 
+    previousCart.map((book) => book.id === bookId ? {
+        ...book,
+        quantity: Math.max(1, (book.quantity || 1) + change)
+    }
+: book
+)
+);
+};
+
     const removeFromCart = (indexToRemove) => {
     setCart((previousCart) =>
         previousCart.filter((book, index) => index !== indexToRemove)
@@ -54,7 +79,7 @@ const removeFromWishlist = (indexToRemove) => {
     );
 }
     return (
-        <CartContext.Provider value={{ cart, setCart, addToCart, removeFromCart, wishlist, setWishlist, addToWishlist, removeFromWishlist }}>
+        <CartContext.Provider value={{ cart, setCart, addToCart, updateQuantity, removeFromCart, wishlist, setWishlist, addToWishlist, removeFromWishlist }}>
             {children}
         </CartContext.Provider>
     )
