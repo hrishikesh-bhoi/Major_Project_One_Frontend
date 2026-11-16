@@ -1,9 +1,18 @@
-import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import CartContext from "../contexts/CartContext";
 export default function Navbar() {
 
     const { cart, wishlist } = useContext(CartContext);
+    const [searchTerm, setSearchTerm] = useState(() => {
+    return new URLSearchParams(window.location.search).get("search") || "";
+});
+    const navigate = useNavigate();
+    const handleSearch = (e) => {
+        e.preventDefault();
+
+        navigate(`/books?search=${encodeURIComponent(searchTerm)}`);
+    };
 
     return ( <>
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -23,6 +32,13 @@ export default function Navbar() {
   <span className="navbar-toggler-icon"></span>
 </button>
                 <div className="collapse navbar-collapse" id="navbarMenu">
+                    <form className="d-flex mx-lg-4 my-2 my-lg-0" onSubmit={handleSearch}>
+                        <input type="text"
+                        className="form-control"
+                        placeholder="Search books..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)} />
+                    </form>
             <ul className="navbar-nav ms-auto">
                 <li className="nav-item">
                     <Link className="nav-link" to="/">
@@ -49,6 +65,11 @@ export default function Navbar() {
                         )}
                     </Link>
                 </li>
+                <li className="nav-item">
+    <Link className="nav-link" to="/profile">
+        Profile
+    </Link>
+</li>
                 
             </ul>
                 </div>

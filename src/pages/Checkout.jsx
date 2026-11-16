@@ -16,10 +16,21 @@ export default function Checkout() {
         pincode: '',
     });
 
+    const [addresses] = useState(() => {
+    const savedAddresses = localStorage.getItem("addresses");
+
+    return savedAddresses ? JSON.parse(savedAddresses) : [];
+});
+
     const { cart, setCart } = useContext(CartContext);
 
     const totalPrice = cart.reduce(
-    (total, book) => total + book.price,
+    (total, book) => total + book.price * (book.quantity || 1),
+    0
+);
+
+const totalBooks = cart.reduce(
+    (total, book) => total + (book.quantity || 1),
     0
 );
 
@@ -69,9 +80,59 @@ const handlePlaceOrder = () => {
             <div className="card mt-3 mb-4">
     <div className="card-body">
         <h5>Total Amount: ₹{totalPrice.toFixed(2)}</h5>
-        <h5>Total Books: {cart.length}</h5>
+        <h5>Total Books: {totalBooks}</h5>
     </div>
 </div>
+
+
+
+<h4>Delivery Address</h4>
+
+{addresses.length === 0 ? (
+    <p className="text-muted">
+        No saved addresses. Please add an address from your Profile.
+    </p>
+) : (
+    addresses.map((address, index) => (
+        <div className="form-check border rounded-3 p-3 mb-2" key={index}>
+            
+            <input
+                className="form-check-input"
+                type="radio"
+                name="deliveryAddress"
+                id={`address-${index}`}
+                checked={
+                        customerInfo.address === address.fullAddress &&
+                            customerInfo.city === address.city &&
+                                customerInfo.pincode === address.pinCode
+                                }
+                                onChange={() => {
+                                        setCustomerInfo({
+                                                    ...customerInfo,
+                                                        address: address.fullAddress,
+                                                        city: address.city,
+                                                        pincode: address.pinCode
+                                                        });
+                                                        }}
+                                                        />
+            <label className="form-check-label" htmlFor={`address-${index}`}>
+                <strong>{address.fullAddress}</strong>
+                <br />
+                {address.city} - {address.pinCode}
+            </label>
+        </div>
+    ))
+)}
+<h5>Selected Delivery Address</h5>
+
+{customerInfo.address ? (
+    <>
+        <p>{customerInfo.address}</p>
+        <p>{customerInfo.city} - {customerInfo.pincode}</p>
+    </>
+) : (
+    <p className="text-muted">Please select a delivery address.</p>
+)}
 
 <h4>Customer Information</h4>
             {/* Full Name */}
@@ -92,23 +153,7 @@ const handlePlaceOrder = () => {
                 <input type="text" className="form-control" id="phone" name="phone" placeholder="Enter your phone number" value={customerInfo.phone} onChange={handleChange} />
             </div>
 
-            {/* Address */}
-            <div className='mb-3'>
-                <label htmlFor="address" className="form-label">Address</label>
-                <input type="text" className="form-control" id="address" name="address" placeholder="Enter your address" value={customerInfo.address} onChange={handleChange} />
-            </div>
-
-            {/* City */}
-            <div className='mb-3'>
-                <label htmlFor="city" className="form-label">City</label>
-                <input type="text" className="form-control" id="city" name="city" placeholder="Enter your city" value={customerInfo.city} onChange={handleChange} />
-            </div>  
-
-            {/* Pincode */}
-            <div className='mb-3'>
-                <label htmlFor="pincode" className="form-label">Pincode</label> 
-                <input type="text" className="form-control" id="pincode" name="pincode" placeholder="Enter your pincode" value={customerInfo.pincode} onChange={handleChange} />
-            </div>
+    
             <button className="btn btn-primary" onClick={handlePlaceOrder}>
                 Place Order
             </button>

@@ -7,11 +7,11 @@ import { Link, useSearchParams } from 'react-router-dom';
 export default function Books() {
     const { addToCart, addToWishlist } = useContext(CartContext);
 
-    const [ searchTerm, setSearchTerm] = useState("");
+    const [ searchParams ] = useSearchParams();   
+    const searchTerm = searchParams.get("search") || "";
     const [ minRating, setMinRating ] = useState("All");
     const [ sortOrder, setSortOrder ] = useState("default");
     
-    const [ searchParams ] = useSearchParams();   
 
     const [ selectedCategory, setSelectedCategory ] = useState(
         searchParams.get("category") || "All"
@@ -174,15 +174,6 @@ const filteredBooks = books
 
         </div>
         <div className="row mb-3">
-    <div className="col-md-6">
-        <input
-            type="text"
-            className="form-control form-control-lg rounded-3"
-            placeholder="Search books..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-        />
-    </div>
 </div>
 
         {/* Rating and Price Filters */}

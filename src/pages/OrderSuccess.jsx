@@ -1,13 +1,44 @@
 import Navbar from "../components/Navbar";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 
 export default function OrderSuccess() {
 
     const navigate = useNavigate();
 
     const location = useLocation();
+    
     const { customerInfo, cart, totalPrice } = location.state || { customerInfo: {}, cart: [], totalPrice: 0 };
 
+    const [ orders, setOrders ] = useState(() => {
+        const savedOrders = localStorage.getItem("orders");
+        return savedOrders ? JSON.parse(savedOrders) : [];
+    })
+
+    const orderSaved = useRef(false)
+
+    useEffect(() => {
+        if(!location.state || orderSaved.current ) return;
+
+        orderSaved.current = true;
+
+        const newOrder = {
+            orderId: Date.now(),
+            customerInfo,
+            books: cart,
+            totalPrice,
+            orderDate: new Date().toLocaleDateString(),
+            status: "Confirmed"
+
+        };
+
+        const updatedOrders = [ ...orders, newOrder];
+
+        setOrders(updatedOrders);
+        localStorage.setItem("orders", JSON.stringify(updatedOrders));
+    }, []);
+
+   
     if(!location.state) {
         return (
             <>
