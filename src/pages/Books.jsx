@@ -1,19 +1,22 @@
 import React, { useState, useContext } from 'react';
 import Navbar from '../components/Navbar';
 import CartContext from '../contexts/CartContext';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 
 export default function Books() {
+
+  const location = useLocation();
     const { addToCart, addToWishlist } = useContext(CartContext);
 
     const [ searchParams ] = useSearchParams();   
-    const searchTerm = searchParams.get("search") || "";
-    const [ minRating, setMinRating ] = useState("All");
-    const [ sortOrder, setSortOrder ] = useState("default");
+    const searchTerm = location.state?.searchTerm || searchParams.get("search") || "";
+    const [ minRating, setMinRating ] = useState(location.state?.minRating || "All" );
+    const [ sortOrder, setSortOrder ] = useState(location.state?.sortOrder || "default");
     
 
     const [ selectedCategory, setSelectedCategory ] = useState(
+      location.state?.selectedCategory || 
         searchParams.get("category") || "All"
     );
 
@@ -87,7 +90,7 @@ export default function Books() {
     category: "Historical Fiction",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_a7AyxLbCd2jytZ2F-7yfptZoIvK4aslQsX9KRbmVfCJNZWM3DqssED5R&s=10",
     price: 450,
-    rating: 4.7,
+    rating: 3.7,
   },
   {
     id: 8,
@@ -116,8 +119,8 @@ export default function Books() {
     author: "Daya Pawar",
     category: "Autobiographical Literature",
     image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1338476136i/14741054.jpg",
-    price: "300",
-    rating: 4.4,
+    price: 300,
+    rating: 3.8,
   },
   {
     id: 11,
@@ -137,7 +140,7 @@ export default function Books() {
     category: "Autobiographical Literature",
     image: "https://m.media-amazon.com/images/I/615EmFqC+yL._AC_UF1000,1000_QL80_.jpg",
     price: 250,
-    rating: 4.3,
+    rating: 3.3,
   }
 ];
 
@@ -149,7 +152,7 @@ const filteredBooks = books
       selectedCategory === "All" || book.category === selectedCategory;
 
     const matchesRating =
-      minRating === "All" || book.rating >= Number(minRating);
+      minRating === "All" || (minRating === "4" && book.rating >= 4) || (minRating === "3below" && book.rating <= 3);
 
     return matchesSearch && matchesCategory && matchesRating;
   })
@@ -187,7 +190,7 @@ const filteredBooks = books
     >
       <option value="All">All Ratings</option>
       <option value="4">4 stars & Above</option>
-      <option value="3">3 stars & Above</option>
+      <option value="3below">3 stars & Below</option>
     </select>
   </div>
 
@@ -206,15 +209,16 @@ const filteredBooks = books
 </div>
 
 {/* Category Filters */}
-<div className="d-flex flex-wrap gap-2 mb-4">
+<div className="d-flex flex-column align-items-start gap-2 mb-4">
   {[
     "All",
     "Mythological Fiction",
     "Historical Fiction",
     "Autobiographical Literature"
   ].map((category) => (
+
     <button
-      key={category}
+    key={category}
       className={`btn ${
         selectedCategory === category
           ? "btn-primary"
@@ -224,6 +228,7 @@ const filteredBooks = books
     >
       {category}
     </button>
+    
   ))}
 </div>
           
@@ -237,7 +242,7 @@ const filteredBooks = books
                     <div className="col-md-3 mb-4" key={book.id}>
                         <div className="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
                             <div className='text-center bg-light p-3'>
-                                <Link to={`/books/${book.slug}`}>
+                                <Link to={`/books/${book.slug}`} state={{selectedCategory, minRating, sortOrder, searchTerm}}>
                                 <img src={book.image} alt={book.title} className='img-fluid' style={{height:"220px", width:"100%", objectFit:"contain"}}/>
                                 
                                 </Link>

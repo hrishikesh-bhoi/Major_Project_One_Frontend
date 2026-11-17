@@ -37,7 +37,7 @@ export default function Cart() {
                 <div className='col-12' key={index}>
                     <div className='card border-0 shadow-sm rounded-4'>
                     <div className='card-body p-4'>
-                        <div className='d-flex align-item-center gap-4'>
+                        <div className='d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3'>
                             <div className='bg-light rounded-3 p-2'>
                                   <img
                                 src={book.image}
@@ -58,7 +58,7 @@ export default function Cart() {
                             <span className='fw-bold'>{book.quantity || 1}</span>
                             <button className='btn btn-outline-secondary btn-sm' onClick={() => updateQuantity(book.id, 1)}>+</button>
                         </div>
-                        <h5 className='text-primary fw-bold'>Price: ₹{Number(book.price.toFixed(2))}</h5>
+                        <h5 className='text-primary fw-bold'>Price: ₹{Number(book.price).toFixed(2)}</h5>
                         <h6 className="fw-bold text-success">Subtotal: ₹{(Number(book.price) * (book.quantity || 1)).toFixed(2)}</h6>
                             </div>
                         <button className='btn btn-danger' onClick={() => removeFromCart(index)}>Remove</button>

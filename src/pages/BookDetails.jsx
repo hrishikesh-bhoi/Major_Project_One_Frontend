@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
 import Navbar from "../components/Navbar";
 import CartContext from "../contexts/CartContext";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 
 export default function BookDetails() {
+  const location = useLocation();
 
     const [ message, setMessage] = useState("");
     const [ quantity, setQuantity ] = useState(1)
@@ -73,7 +74,7 @@ export default function BookDetails() {
     price: 450,
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_a7AyxLbCd2jytZ2F-7yfptZoIvK4aslQsX9KRbmVfCJNZWM3DqssED5R&s=10",
     description: "A historical Marathi novel depicting the courage, leadership, and struggles of Chhatrapati Sambhaji Maharaj.",
-    rating: 4.7,
+    rating: 3.7,
   },
   {
     id: "panipat",
@@ -100,7 +101,7 @@ export default function BookDetails() {
     price: 300,
     image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1338476136i/14741054.jpg",
     description: "An autobiographical Marathi literary work by Daya Pawar that explores caste discrimination, social inequality, and the struggles of marginalized communities.",
-    rating: 4.4,
+    rating: 3.8,
   },
   {
     id: "smritichitre",
@@ -118,7 +119,7 @@ export default function BookDetails() {
     price: 250,
     image: "https://m.media-amazon.com/images/I/615EmFqC+yL._AC_UF1000,1000_QL80_.jpg",
     description: "A Marathi social novel by Hari Narayan Apte that explores family life, education, social customs, and the importance of awareness and responsibility.",
-    rating: 4.3,
+    rating: 3.3,
   }
 ];
 
@@ -174,7 +175,7 @@ const selectedBook = books.find((book) => book.id === bookId);
                         <button className="btn btn-primary btn-lg px-4" onClick={() => { addToCart(selectedBook, quantity); setMessage(`"${selectedBook.title}" has been added to your cart successfully !`); }}>Add to Cart</button>
                         <button className="btn btn-outline-danger btn-lg px-4 ms-2" 
                         onClick={() => {addToWishlist(selectedBook); setMessage(`"${selectedBook.title}" added to your wishlist!`);}}>Add to Wishlist</button>
-                        <Link to="/books" className="btn btn-outline-secondary btn-lg ms-3 px-4">Back to Books</Link>
+                        <Link to="/books" state={location.state} className="btn btn-outline-secondary btn-lg ms-3 px-4">Back to Books</Link>
                         </div>
                         </div>
                         </>

@@ -3,18 +3,11 @@ import Navbar from "../components/Navbar";
 
 export default function Profile() {
 
-    const [profile, setProfile] = useState(() => {
-    const savedProfile = localStorage.getItem("profile");
-
-    return savedProfile
-        ? JSON.parse(savedProfile)
-        : {
-            fullName: "",
-            email: "",
-            phone: ""
-        };
-});
-
+   const profile = {
+    fullName: "John Doe",
+    email: "doe.john@gmail.com",
+    phone: "9876543210"
+};
 
 const [addresses, setAddresses] = useState(() => {
     const savedAddresses = localStorage.getItem("addresses");
@@ -45,42 +38,19 @@ const [orders, setOrders] = useState(() => {
             <p className="text-muted">Manage your personal information</p>
         
         <div className="card shadow-sm border-0 rounded-4 p-4 mt-4">
-            <div className="mb-3">
-                <label className="form-label fw-bold">Full Name</label>
-                <input
-                type="text"
-                className="form-control"
-                placeholder="Enter your full name"
-                value={profile.fullName}
-                onChange={(e) => setProfile({...profile, fullName: e.target.value})}
-                 />
-            </div>
-            <div className="mb-3">
-                <label className="form-label fw-bold">Email address</label>
-                <input 
-                type="email"
-                className="form-control"
-                placeholder="Enter your email"
-                value={profile.email}
-                onChange={(e) => setProfile({...profile, email: e.target.value})}
-                />
-            </div>
-            <div className="mb-3">
-                <label className="form-label fw-bold">Phone Number</label>                
-                <input 
-                type="tel"
-                className="form-control"
-                placeholder="Enter your phone number"
-                value={profile.phone}
-                onChange={(e) => setProfile({...profile, phone: e.target.value})}
-                 />
-            </div>
-            <button className="btn btn-primary" onClick={() => {
-                localStorage.setItem("profile", JSON.stringify(profile));
-                alert("Profile saved successfully.")
-            }}>
-                Save Profile
-            </button>
+           <h4 className="fw-bold mb-3">Personal Information</h4>
+           <div className="mb-3">
+            <label className="form-label fw-bold">Full Name</label>
+            <p className="text-muted">{profile.fullName}</p>
+           </div>
+           <div className="mb-3">
+            <label className="form-label fw-bold">Email Address</label>
+            <p className="text-muted">{profile.email}</p>
+           </div>
+           <div className="mb-3">
+            <label className="form-label fw-bold">Phone Number</label>
+            <p className="text-muted">{profile.phone}</p>
+           </div>
             </div>
              <div className="card shadow-sm border-0 rounded-4 p-4 mt-4">
                 <h4 className="fw-bold mb-3">My Address</h4>
@@ -109,9 +79,17 @@ const [orders, setOrders] = useState(() => {
                     <input
                      type="text"
                      className="form-control"
-                      placeholder="Enter PIN code"
+                      placeholder="Enter 6-digit pincode"
                       value={newAddress.pinCode}
-                      onChange={(e) => setNewAddress({...newAddress, pinCode: e.target.value})}
+                      maxLength={6}
+                      inputMode="numeric"
+                      onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, "");
+                                setNewAddress({
+                                        ...newAddress,
+                                        pinCode: value
+                                          });
+                                            }}
                        />
                 </div>
                 <button
@@ -125,6 +103,10 @@ const [orders, setOrders] = useState(() => {
 
         }
 
+        if(newAddress.pinCode.length !== 6) {
+            alert("Pincode must contain exactly 6 digits.")
+            return;
+        }
         const alreadyExists = addresses.some(
     (address) =>
         address.fullAddress === newAddress.fullAddress &&
@@ -138,6 +120,7 @@ if (alreadyExists) {
 }
 
 const updatedAddresses = [...addresses, newAddress];
+
 
         setAddresses(updatedAddresses);
         localStorage.setItem("addresses", JSON.stringify(updatedAddresses));

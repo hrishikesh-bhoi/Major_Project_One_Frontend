@@ -150,7 +150,23 @@ const handlePlaceOrder = () => {
             {/* Phone number */}
             <div className='mb-3'>
                 <label htmlFor="phone" className="form-label">Phone Number</label>
-                <input type="text" className="form-control" id="phone" name="phone" placeholder="Enter your phone number" value={customerInfo.phone} onChange={handleChange} />
+                <input 
+                type="text" 
+                className="form-control" 
+                id="phone" 
+                name="phone" 
+                maxLength={10}
+                inputMode='numeric'
+                placeholder="Enter 10-digit phone number" 
+                value={customerInfo.phone} 
+                onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                            setCustomerInfo({
+                                   ...customerInfo,
+                                    phone: value
+                                        });
+                                            }}
+                />
             </div>
 
     
