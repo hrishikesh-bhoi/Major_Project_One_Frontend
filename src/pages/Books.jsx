@@ -152,7 +152,7 @@ const filteredBooks = books
       selectedCategory === "All" || book.category === selectedCategory;
 
     const matchesRating =
-      minRating === "All" || (minRating === "4" && book.rating >= 4) || (minRating === "3below" && book.rating <= 3);
+      minRating === "All" || (minRating === "4" && book.rating >= 4) || (minRating === "3below" && book.rating < 4);
 
     return matchesSearch && matchesCategory && matchesRating;
   })
@@ -190,7 +190,7 @@ const filteredBooks = books
     >
       <option value="All">All Ratings</option>
       <option value="4">4 stars & Above</option>
-      <option value="3below">3 stars & Below</option>
+      <option value="3below">Below 4 stars</option>
     </select>
   </div>
 

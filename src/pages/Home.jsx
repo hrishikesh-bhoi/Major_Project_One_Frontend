@@ -72,7 +72,7 @@ export default function Home() {
               style={{height:"180px", objectFit:"cover"}}
               />
               <div className="card-body text-center">
-                <h5>Historical Fiction</h5>
+                <h5 className="fw-bold">Historical Fiction</h5>
               </div>
             </div>
         </div>
@@ -90,7 +90,7 @@ export default function Home() {
               style={{height:"180px", objectFit:"cover"}}
               />
               <div className="card-body text-center">
-                <h5>Autobiographical Literature</h5>
+                <h5 className="fw-bold">Autobiographical Literature</h5>
 
               </div>
             </div>
