@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -5,7 +6,7 @@ import CartContext from '../contexts/CartContext';
 
 export default function Cart() {
 
-    const { cart, removeFromCart, updateQuantity } = useContext(CartContext);
+    const { cart, removeFromCart, updateQuantity, addToWishlist } = useContext(CartContext);
 
     const totalPrice = cart.reduce((total, book) => total + Number(book.price) * (book.quantity || 1), 0);
 
@@ -39,6 +40,7 @@ export default function Cart() {
                     <div className='card-body p-4'>
                         <div className='d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3'>
                             <div className='bg-light rounded-3 p-2'>
+                                <Link to={`/books/${book.slug}`}>
                                   <img
                                 src={book.image}
                                 alt={book.title}
@@ -48,21 +50,51 @@ export default function Cart() {
                                     objectFit: "contain"
                                 }}
                             />
+                            </Link>
                             </div>
                             <div className='flex-grow-1'>
                         <h5 className='fw-bold'>{book.title}</h5>
                         <p className='text-muted mb-2'>Author: {book.author}</p>
                         <div className='d-flex align-items-center gap-3 my-3'>
                             <span className='fw-bold'>Quantity:</span>
-                            <button className='btn btn-outline-secondary btn-sm' onClick={() => updateQuantity(book.id, -1)}>-</button>
+                            <button className='btn btn-outline-secondary btn-sm' onClick={() => {
+                                if ((book.quantity || 1) > 1) {
+                                    updateQuantity(book.id, -1);
+                                    toast.info("Book quantity decreased.");
+                                    } else {
+                                        toast.warning("Minimum quantity is 1.");
+                                        }
+                                        }}>-</button>
                             <span className='fw-bold'>{book.quantity || 1}</span>
-                            <button className='btn btn-outline-secondary btn-sm' onClick={() => updateQuantity(book.id, 1)}>+</button>
+                            <button className='btn btn-outline-secondary btn-sm' onClick={() => {
+                                updateQuantity(book.id, 1);
+                                toast.success("Book quantity increased.");
+                                }}>+</button>
                         </div>
                         <h5 className='text-primary fw-bold'>Price: ₹{Number(book.price).toFixed(2)}</h5>
                         <h6 className="fw-bold text-success">Subtotal: ₹{(Number(book.price) * (book.quantity || 1)).toFixed(2)}</h6>
                             </div>
-                        <button className='btn btn-danger' onClick={() => removeFromCart(index)}>Remove</button>
-                       
+                        <div className="d-flex flex-column gap-2">
+                            <button
+                            className="btn btn-outline-primary"
+                            onClick={() => {
+                                addToWishlist(book);
+                                removeFromCart(index);
+                                toast.success(`${book.title} moved to wishlist.`);
+                                }}
+                                >
+                                    Add to Wishlist
+                                    </button>
+                                    <button
+                                    className="btn btn-danger"
+                                    onClick={() => {
+                                        removeFromCart(index);
+                                        toast.success(`${book.title} removed from cart.`);
+                                        }}
+                                        >
+                                            Remove
+                                            </button>
+                                            </div>                     
                         </div>
                     </div>
                 </div>

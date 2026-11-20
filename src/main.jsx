@@ -1,3 +1,5 @@
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -60,6 +62,11 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <CartProvider>
     <RouterProvider router={router} />
+    <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        theme="colored"
+        />
     </CartProvider>
   </StrictMode>,
 )

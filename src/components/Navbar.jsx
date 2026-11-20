@@ -1,3 +1,4 @@
+import { toast } from "react-toastify"
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import CartContext from "../contexts/CartContext";
@@ -8,8 +9,14 @@ export default function Navbar() {
     return new URLSearchParams(window.location.search).get("search") || "";
 });
     const navigate = useNavigate();
+
     const handleSearch = (e) => {
         e.preventDefault();
+
+        if(!searchTerm.trim()) {
+            toast.warning("Please enter a book name to search.");
+            return
+        }
 
         navigate(`/books?search=${encodeURIComponent(searchTerm)}`);
     };
@@ -38,6 +45,7 @@ export default function Navbar() {
                         placeholder="Search books..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)} />
+                        <button type="submit" className="btn btn-primary ms-2">Search</button>
                     </form>
             <ul className="navbar-nav ms-auto">
                 <li className="nav-item">

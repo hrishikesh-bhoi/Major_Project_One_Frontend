@@ -1,6 +1,8 @@
+import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 import React, { useContext } from "react";
 import CartContext from "../contexts/CartContext";
+import { Link } from "react-router-dom";
 
 export default function Wishlist() {
 
@@ -30,16 +32,25 @@ export default function Wishlist() {
                                 <div className="col-md-3 mb-4" key={book.id}>
                                     <div className="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
                                         <div className="text-center bg-light p-3">
+                                            <Link to={`/books/${book.slug}`}>
                                             <img src={book.image} alt={book.title} className="img-fluid" style={{height:"220px", width:"100%", objectFit:"contain"}}/>
+                                            </Link>
                                         </div>
                                         <div className="card-body">
                                             <h5 className="card-title fw-bold">{book.title}</h5>
                                             <p className="text-muted mb-2">By {book.author}</p>
                                             <h5 className="text-primary fw-bold mb-3">₹{book.price}</h5>
                                             <div className="d-grid gap-2">
-                                            <button className="btn btn-primary mt-2" onClick={() => {addToCart(book); removeFromWishlist(index);}}>Move to Cart</button>
+                                            <button className="btn btn-primary mt-2"  onClick={() => {
+                                                addToCart(book);
+                                                removeFromWishlist(index);
+                                                toast.success(`${book.title} moved to cart!`);
+                                                }}>Move to Cart</button>
                                                 
-                                            <button className="btn btn-danger" onClick={() => removeFromWishlist(index)}>
+                                            <button className="btn btn-danger" onClick={() => {
+                                                removeFromWishlist(index);
+                                                toast.success(`${book.title} removed from wishlist!`);
+                                                }}>
                                                 Remove from Wishlist
                                             </button>
                                             </div>

@@ -1,12 +1,22 @@
+import { toast } from "react-toastify";
 import React, { useState, useContext } from 'react';
 import Navbar from '../components/Navbar';
 import CartContext from '../contexts/CartContext';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams, useNavigate } from 'react-router-dom';
 
 
 export default function Books() {
 
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleClearFilters = () => {
+    setSelectedCategory("All");
+    setMinRating("All");
+    setSortOrder("default");
+     navigate("/books", { replace: true });
+  };
+
     const { addToCart, addToWishlist } = useContext(CartContext);
 
     const [ searchParams ] = useSearchParams();   
@@ -209,7 +219,7 @@ const filteredBooks = books
 </div>
 
 {/* Category Filters */}
-<div className="d-flex flex-column align-items-start gap-2 mb-4">
+<div className="d-flex flex-wrap align-items-start gap-2 mb-4">
   {[
     "All",
     "Mythological Fiction",
@@ -229,7 +239,14 @@ const filteredBooks = books
       {category}
     </button>
     
+    
   ))}
+  <button
+  className="btn btn-outline-secondary mb-4"
+  onClick={handleClearFilters}
+>
+  Clear Filters
+</button>
 </div>
           
         <div className="row">
@@ -264,10 +281,10 @@ const filteredBooks = books
                                 <h5 className='text-primary fw-bold mb-3'>₹{book.price}</h5>
                                 <div className='d-grid gap-2'>
 
-                                <button className="btn btn-primary" onClick={() => addToCart(book)}>
+                                <button className="btn btn-primary" onClick={() => {addToCart(book); toast.success(`${book.title} added to cart!`);}}>
                                     Add to Cart
                                 </button>
-                                <button className="btn btn-outline-danger" onClick={() => addToWishlist(book)}>
+                                <button className="btn btn-outline-danger" onClick={() => {addToWishlist(book); toast.success(`${book.title} added to wishist!`);}}>
                                     Add to Wishlist
                                 </button>
                                 </div>

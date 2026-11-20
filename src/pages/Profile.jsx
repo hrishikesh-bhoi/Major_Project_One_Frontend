@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import React, { useState} from "react"
 import Navbar from "../components/Navbar";
 
@@ -19,6 +20,9 @@ const [newAddress, setNewAddress] = useState({
     city: "",
     pinCode: ""
 });
+
+const [ editingIndex, setEditingIndex ] = useState(null)
+
 const [defaultAddress, setDefaultAddress] = useState(() => {
     const savedDefault = localStorage.getItem("defaultAddress");
     return savedDefault ? JSON.parse(savedDefault) : null;
@@ -98,43 +102,70 @@ const [orders, setOrders] = useState(() => {
                         if (!newAddress.fullAddress.trim() ||
                                 !newAddress.city.trim() ||
                                         !newAddress.pinCode.trim()) {
-                                                    alert("Please fill in all address fields.");
+                                                    toast.error("Please fill in all address fields.");
                                                             return;
 
         }
 
         if(newAddress.pinCode.length !== 6) {
-            alert("Pincode must contain exactly 6 digits.")
+            toast.error("Pincode must contain exactly 6 digits.");
             return;
         }
         const alreadyExists = addresses.some(
-    (address) =>
+    (address, index) =>
+        index !== editingIndex &&
         address.fullAddress === newAddress.fullAddress &&
         address.city === newAddress.city &&
         address.pinCode === newAddress.pinCode
 );
 
 if (alreadyExists) {
-    alert("This address is already saved.");
+    toast.warning("This address is already saved.");
     return;
 }
 
-const updatedAddresses = [...addresses, newAddress];
+let updatedAddresses;
 
+if (editingIndex !== null) {
+    const oldAddress = addresses[editingIndex];
 
-        setAddresses(updatedAddresses);
-        localStorage.setItem("addresses", JSON.stringify(updatedAddresses));
+    updatedAddresses = addresses.map((address, index) =>
+        index === editingIndex ? newAddress : address
+    );
 
-        setNewAddress({
-            fullAddress: "",
-            city: "",
-            pinCode: ""
-        });
+    if (
+        defaultAddress &&
+        defaultAddress.fullAddress === oldAddress.fullAddress &&
+        defaultAddress.city === oldAddress.city &&
+        defaultAddress.pinCode === oldAddress.pinCode
+    ) {
+        setDefaultAddress(newAddress);
+        localStorage.setItem(
+            "defaultAddress",
+            JSON.stringify(newAddress)
+        );
+    }
 
-        alert("Address saved successfully!");
+    toast.success("Address updated successfully!");
+} else {
+    updatedAddresses = [...addresses, newAddress];
+
+    toast.success("Address saved successfully!");
+}
+
+setAddresses(updatedAddresses);
+localStorage.setItem("addresses", JSON.stringify(updatedAddresses));
+
+setNewAddress({
+    fullAddress: "",
+    city: "",
+    pinCode: ""
+});
+
+setEditingIndex(null);
     }}
 >
-    Save Address
+    { editingIndex !== null ? "Update Address" : "Save Address"}
 </button>
 
 {addresses.map((address, index) => (
@@ -145,19 +176,73 @@ const updatedAddresses = [...addresses, newAddress];
         <p className="mb-2">
             {address.city} - {address.pinCode}
         </p>
+        <button
+    className="btn btn-warning btn-sm me-2"
+    onClick={() => {
+        setNewAddress({
+            fullAddress: address.fullAddress,
+            city: address.city,
+            pinCode: address.pinCode
+        });
+
+        setEditingIndex(index);
+    }}
+>
+    Edit
+</button>
 
         <button
-            className="btn btn-outline-primary btn-sm"
+            className="btn btn-outline-primary btn-sm me-2"
             onClick={() => {
                 setDefaultAddress(address);
                 localStorage.setItem(
                     "defaultAddress",
                     JSON.stringify(address)
                 );
+                toast.success("Default address updated successfully!");
             }}
         >
             Set as Default
         </button>
+        <button
+    className="btn btn-outline-danger btn-sm"
+    onClick={() => {
+        const updatedAddresses = addresses.filter(
+            (_, i) => i !== index
+        );
+
+        setAddresses(updatedAddresses);
+        localStorage.setItem(
+            "addresses",
+            JSON.stringify(updatedAddresses)
+        );
+
+        if (
+            defaultAddress &&
+            defaultAddress.fullAddress === address.fullAddress &&
+            defaultAddress.city === address.city &&
+            defaultAddress.pinCode === address.pinCode
+        ) {
+            setDefaultAddress(null);
+            localStorage.removeItem("defaultAddress");
+        }
+
+        if (editingIndex === index) {
+            setNewAddress({
+                fullAddress: "",
+                city: "",
+                pinCode: ""
+            });
+            setEditingIndex(null);
+        } else if (editingIndex !== null && editingIndex > index) {
+            setEditingIndex(editingIndex - 1);
+        }
+
+        toast.success("Address deleted successfully!");
+    }}
+>
+    Delete
+</button>
 
         {defaultAddress &&
             defaultAddress.fullAddress === address.fullAddress &&

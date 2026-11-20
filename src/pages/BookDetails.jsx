@@ -129,7 +129,7 @@ const selectedBook = books.find((book) => book.id === bookId);
         <>
         <Navbar />
         <div className="container my-5">
-            <div className="card border-0 shadow-lg p-4 rounded-4">
+            <div className="card border-0 shadow-lg p-3 p-md-4 rounded-4">
                 {
                     selectedBook ? (
                         <>
@@ -172,10 +172,22 @@ const selectedBook = books.find((book) => book.id === bookId);
                           <span className="fw-bold">{quantity}</span>
                           <button className="btn btn-outline-secondary" onClick={() => setQuantity(quantity + 1)}>+</button>
                         </div>
-                        <button className="btn btn-primary btn-lg px-4" onClick={() => { addToCart(selectedBook, quantity); setMessage(`"${selectedBook.title}" has been added to your cart successfully !`); }}>Add to Cart</button>
-                        <button className="btn btn-outline-danger btn-lg px-4 ms-2" 
+                        <div className="row g-2 mt-4">
+                          <div className="col-md-12 col-sm-4">
+                        <button className="btn btn-primary btn-lg w-100" onClick={() => { addToCart(selectedBook, quantity); setMessage(`"${selectedBook.title}" has been added to your cart successfully !`); }}>Add to Cart</button>
+
+                          </div>
+                          <div className="col-md-12 col-sm-4">
+                            <button className="btn btn-outline-danger btn-lg w-100" 
                         onClick={() => {addToWishlist(selectedBook); setMessage(`"${selectedBook.title}" added to your wishlist!`);}}>Add to Wishlist</button>
-                        <Link to="/books" state={location.state} className="btn btn-outline-secondary btn-lg ms-3 px-4">Back to Books</Link>
+
+                          </div>
+                          <div className="col-md-12 col-sm-4">
+                        <Link to="/books" state={location.state} className="btn btn-outline-secondary btn-lg w-100">Back to Books</Link>
+
+                          </div>
+                        
+                        </div>
                         </div>
                         </div>
                         </>

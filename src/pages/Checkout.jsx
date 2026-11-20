@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -44,6 +45,11 @@ const totalBooks = cart.reduce(
 };
 
 const handlePlaceOrder = () => {
+
+    if(cart.length === 0) {
+        toast.warning("Your cart is empty!");
+        return;
+    }
     if(
         !customerInfo.name ||
         !customerInfo.email ||
@@ -52,10 +58,22 @@ const handlePlaceOrder = () => {
         !customerInfo.city ||
         !customerInfo.pincode
     ) {
-        alert("Please fill in all the fields.");
+        toast.error("Please fill in all the fields.");
         return;
     }
-    alert("Order placed successfully!");
+
+    if(customerInfo.phone.length !== 10) {
+        toast.error("Phone number must contain exactly 10 digits.");
+        return;
+    }
+
+    if (customerInfo.pincode.length !== 6) {
+        toast.error("Pincode must containe exactly 6 digits.");
+        return;
+    }
+
+    toast.success("Order place successfully!");
+    
     navigate("/order-success", { state: { customerInfo, cart, totalPrice } });
     setCart([]); // Clear the cart after placing the order
     
@@ -94,7 +112,7 @@ const handlePlaceOrder = () => {
     </p>
 ) : (
     addresses.map((address, index) => (
-        <div className="form-check border rounded-3 p-3 mb-2" key={index}>
+        <div className="form-check border rounded-3 p-3 ps-5 mb-2" key={index}>
             
             <input
                 className="form-check-input"
