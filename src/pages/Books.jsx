@@ -190,8 +190,19 @@ const filteredBooks = books
 </div>
 
         {/* Rating and Price Filters */}
-<div className="row mb-4">
-  <div className="col-md-3 mb-2">
+<div className="row g-4">
+    <div className="col-lg-3">
+        <div className="card border-0 shadow-sm rounded-4 p-3">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <h5 className="fw-bold mb-0">Filters</h5>
+                <button
+                    className="btn btn-outline-secondary mb-4"
+                    onClick={handleClearFilters}
+                >
+                    Clear
+                </button>
+            </div>
+  <div className="mb-3">
     <label className="form-label fw-bold">Filter by Rating</label>
     <select
       className="form-select"
@@ -204,7 +215,7 @@ const filteredBooks = books
     </select>
   </div>
 
-  <div className="col-md-3 mb-2">
+  <div className="mb-3">
     <label className="form-label fw-bold">Sort by Price</label>
     <select
       className="form-select"
@@ -216,39 +227,36 @@ const filteredBooks = books
       <option value="highToLow">Price: High to Low</option>
     </select>
   </div>
+  {/* Category Filter */}
+<div className="mt-4">
+    <h6 className="fw-bold mb-3">Category</h6>
+
+    {[
+        "All",
+        "Mythological Fiction",
+        "Historical Fiction",
+        "Autobiographical Literature"
+    ].map((category) => (
+        <div className="form-check mb-2" key={category}>
+            <input
+                className="form-check-input"
+                type="radio"
+                name="category"
+                id={category}
+                checked={selectedCategory === category}
+                onChange={() => setSelectedCategory(category)}
+            />
+            <label className="form-check-label" htmlFor={category}>
+                {category}
+            </label>
+        </div>
+    ))}
+</div>
 </div>
 
-{/* Category Filters */}
-<div className="d-flex flex-wrap align-items-start gap-2 mb-4">
-  {[
-    "All",
-    "Mythological Fiction",
-    "Historical Fiction",
-    "Autobiographical Literature"
-  ].map((category) => (
-
-    <button
-    key={category}
-      className={`btn ${
-        selectedCategory === category
-          ? "btn-primary"
-          : "btn-outline-primary"
-      }`}
-      onClick={() => setSelectedCategory(category)}
-    >
-      {category}
-    </button>
-    
-    
-  ))}
-  <button
-  className="btn btn-outline-secondary mb-4"
-  onClick={handleClearFilters}
->
-  Clear Filters
-</button>
-</div>
-          
+        </div>
+        {/* Books Section */}
+    <div className="col-lg-9">          
         <div className="row">
             {
                 filteredBooks.length === 0 ? (
@@ -256,7 +264,7 @@ const filteredBooks = books
                         <p className="text-center text-muted">No books found.</p>
                     
                 ) :  (filteredBooks.map((book) => (
-                    <div className="col-md-3 mb-4" key={book.id}>
+                    <div className="col-md-4 mb-4" key={book.id}>
                         <div className="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
                             <div className='text-center bg-light p-3'>
                                 <Link to={`/books/${book.slug}`} state={{selectedCategory, minRating, sortOrder, searchTerm}}>
@@ -295,6 +303,8 @@ const filteredBooks = books
             }
         </div>
         
+    </div>
+    </div>
     </div>
 
     </>)
