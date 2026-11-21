@@ -50,6 +50,11 @@ const handlePlaceOrder = () => {
         toast.warning("Your cart is empty!");
         return;
     }
+
+    if (!customerInfo.address) {
+    toast.error("Please add or select an address.");
+    return;
+}
     if(
         !customerInfo.name ||
         !customerInfo.email ||
