@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import CartContext from '../contexts/CartContext';
 import { Link, useLocation, useSearchParams, useNavigate } from 'react-router-dom';
 import useFetch from "../useFetch";
+import Footer from "../components/Footer";
 
 
 export default function Books() {
@@ -198,6 +199,7 @@ if (error) {
     </div>
     </div>
     </div>
+    <Footer />
 
     </>)
 }

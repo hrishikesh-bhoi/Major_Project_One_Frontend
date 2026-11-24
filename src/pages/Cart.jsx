@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import CartContext from '../contexts/CartContext';
+import Footer from "../components/Footer";
 
 export default function Cart() {
 
@@ -116,5 +117,6 @@ export default function Cart() {
         }
 
     </div>
+    <Footer />
     </>)
 }

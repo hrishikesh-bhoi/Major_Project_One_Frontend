@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import React, { useContext } from "react";
 import CartContext from "../contexts/CartContext";
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
 
 export default function Wishlist() {
 
@@ -64,6 +65,7 @@ export default function Wishlist() {
                         </div>
 )}
         </div>
+        <Footer />
         </>
     )
 }
