@@ -1,7 +1,6 @@
 import { toast } from "react-toastify";
 import React, { useState} from "react"
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+
 
 export default function Profile() {
 
@@ -36,7 +35,7 @@ const [orders, setOrders] = useState(() => {
 
     return (
         <>
-        <Navbar />
+       
         <div className="container my-5">
             <h2 className="fw-bold">My Profile</h2>
            
@@ -283,7 +282,7 @@ setEditingIndex(null);
             </div>
         
         </div>
-        <Footer />
+       
         </>
     );
 }

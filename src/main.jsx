@@ -22,39 +22,46 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    children: [
+
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "home",
+        element: <Home />,
+      }, 
+      {
+        path: "books",
+        element: <Books />,
+      },
+      {
+        path: "cart",
+        element: <Cart />,
+      },
+      {
+        path: "checkout",
+        element: <Checkout />,
+      },
+      {
+        path: "order-success",
+        element: <OrderSuccess />,
+      }, 
+      {
+        path: "books/:bookId",
+        element: <BookDetails />,
+      },
+      {
+        path: "wishlist",
+        element: <Wishlist />,
+      },
+      {
+        path: "profile",
+        element: <Profile />
+      },
+    ],
   },
-  {
-    path: "/home",
-    element: <App />,
-  }, 
-  {
-    path: "/books",
-    element: <Books />,
-  },
-  {
-    path: "/cart",
-    element: <Cart />,
-  },
-  {
-    path: "/checkout",
-    element: <Checkout />,
-  },
-  {
-    path: "/order-success",
-    element: <OrderSuccess />,
-  }, 
-  {
-    path: "/books/:bookId",
-    element: <BookDetails />,
-  },
-  {
-    path: "/wishlist",
-    element: <Wishlist />,
-  },
-  {
-    path: "/profile",
-    element: <Profile />
-  }
 
 ]);
 

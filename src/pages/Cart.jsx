@@ -1,9 +1,9 @@
 import { toast } from "react-toastify";
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+
 import CartContext from '../contexts/CartContext';
-import Footer from "../components/Footer";
+
 
 export default function Cart() {
 
@@ -14,7 +14,7 @@ export default function Cart() {
     const totalBooks = cart.reduce((total, book) => total + (book.quantity || 1) ,0)
 
     return ( <>
-    <Navbar />
+    
     <div className="container my-5">
         <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -117,6 +117,6 @@ export default function Cart() {
         }
 
     </div>
-    <Footer />
+   
     </>)
 }

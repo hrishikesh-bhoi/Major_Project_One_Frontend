@@ -1,9 +1,9 @@
 import { toast } from 'react-toastify';
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+
 import CartContext from '../contexts/CartContext';
-import Footer from '../components/Footer';
+
 
 export default function Checkout() {
 
@@ -87,7 +87,7 @@ const handlePlaceOrder = () => {
 
     return (
         <>
-        <Navbar />
+        
         <div className="container my-4">
             <h2>Checkout</h2>
             <hr />
@@ -198,7 +198,7 @@ const handlePlaceOrder = () => {
                 Place Order
             </button>
         </div>
-        <Footer />
+       
         </>
     )
 }

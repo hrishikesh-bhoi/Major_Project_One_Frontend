@@ -1,9 +1,9 @@
 import { toast } from "react-toastify";
-import Navbar from "../components/Navbar";
+
 import React, { useContext } from "react";
 import CartContext from "../contexts/CartContext";
 import { Link } from "react-router-dom";
-import Footer from "../components/Footer";
+
 
 export default function Wishlist() {
 
@@ -11,7 +11,7 @@ export default function Wishlist() {
 
     return (
         <>
-        <Navbar />
+      
         <div className="container my-5">
             <div className="d-flex justify-content-between align-items-center">
                 <div>
@@ -65,7 +65,7 @@ export default function Wishlist() {
                         </div>
 )}
         </div>
-        <Footer />
+       
         </>
     )
 }

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useSearchParams  } from "react-router-dom";
-import Footer from "../components/Footer";
+
 
 export default function Home() {
 
@@ -170,7 +170,6 @@ export default function Home() {
 
 </section>
 
-<Footer />
 
         </>
     );

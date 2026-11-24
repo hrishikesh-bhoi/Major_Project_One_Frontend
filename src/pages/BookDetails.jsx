@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
-import Navbar from "../components/Navbar";
+
 import CartContext from "../contexts/CartContext";
 import { useParams, Link, useLocation } from "react-router-dom";
 import useFetch from "../useFetch";
-import Footer from "../components/Footer";
+
 
 export default function BookDetails() {
   const location = useLocation();
@@ -30,7 +30,7 @@ if (error) {
 
     return (
         <>
-        <Navbar />
+        
         <div className="container my-5">
             <div className="card border-0 shadow-lg p-3 p-md-4 rounded-4">
                 {
@@ -100,7 +100,7 @@ if (error) {
                 }
             </div>
         </div>
-        <Footer />
+        
         </>
     )
   }

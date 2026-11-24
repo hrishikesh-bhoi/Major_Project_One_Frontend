@@ -1,10 +1,9 @@
 import { toast } from "react-toastify";
 import React, { useState, useContext } from 'react';
-import Navbar from '../components/Navbar';
 import CartContext from '../contexts/CartContext';
 import { Link, useLocation, useSearchParams, useNavigate } from 'react-router-dom';
 import useFetch from "../useFetch";
-import Footer from "../components/Footer";
+
 
 
 export default function Books() {
@@ -72,7 +71,6 @@ if (error) {
 }
 
     return ( <>
-    <Navbar />
     <div className="container my-4">
         <div className='mb-4'>
             <h2 className='fw-bold'>Explore Our Books</h2>
@@ -199,7 +197,7 @@ if (error) {
     </div>
     </div>
     </div>
-    <Footer />
+   
 
     </>)
 }

@@ -1,7 +1,7 @@
-import Navbar from "../components/Navbar";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import Footer from "../components/Footer";
+
 
 export default function OrderSuccess() {
 
@@ -43,7 +43,7 @@ export default function OrderSuccess() {
     if(!location.state) {
         return (
             <>
-            <Navbar />
+            
             <div className="container my-4">
                 <h2>No order details available.</h2>
                 </div>
@@ -74,7 +74,7 @@ export default function OrderSuccess() {
     Continue Shopping
 </button>
         </div>
-        <Footer />
+        
         </>
     )
 }

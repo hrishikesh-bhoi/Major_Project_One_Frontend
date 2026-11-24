@@ -182,3 +182,24 @@
     border-right-color: var(--border);
   }
 } */
+
+
+/* Main application layout */
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main page content */
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Footer */
+footer {
+  margin-top: auto;
+}
+
