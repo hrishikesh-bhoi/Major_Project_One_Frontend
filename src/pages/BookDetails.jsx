@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import Navbar from "../components/Navbar";
 import CartContext from "../contexts/CartContext";
 import { useParams, Link, useLocation } from "react-router-dom";
+import useFetch from "../useFetch";
 
 export default function BookDetails() {
   const location = useLocation();
@@ -10,120 +11,21 @@ export default function BookDetails() {
     const [ quantity, setQuantity ] = useState(1)
 
     const { bookId } = useParams();
+
+    const { data, loading, error } = useFetch(`https://major-project-one-backend-omega.vercel.app/api/books/slug/${bookId}`);
+    
     
     const { addToCart, addToWishlist } = useContext(CartContext);
-    const books = [
-  {
-    id: "mrutyunjay",
-    title: "Mrutyunjay",
-    author: "Shivaji Sawant",
-    price: 459,
-    image: "https://www.majesticreaders.com/thumb/booksimg/450/600/14016/140160_PIC_1614492711.jpg",
-    description: "A famous Marathi novel based on the life of Karna.",
-    rating: 4.8
-  },
-  {
-    id: "yayati",
-    title: "Yayati",
-    author: "V. S. Khandekar",
-    price: 232,
-    image: "https://m.media-amazon.com/images/I/41pYblF83EL._AC_UF1000,1000_QL80_.jpg",
-    description: "A celebrated Marathi novel inspired by the story of Yayati.",
-    rating: 4.6,
-  },
-  {
-    id: "shriman-yogi",
-    title: "Shriman Yogi",
-    author: "Ranjit Desai",
-    price: 740,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcTWR_z24PP0FjlGKdlMRgYtqFxEWiH8fFc3-WnBeuqi1CZK-4V_0hA0nC&s=10",
-    description: "A historical novel about the life of Chhatrapati Shivaji Maharaj.",
-    rating: 4.9,
-  },
-  {
-    id: "shyamchi-aai",
-    title: "Shyamchi Aai",
-    author: "Sane Guruji",
-    price: 150,
-    image: "https://m.media-amazon.com/images/I/51IPv0Ps+wL._AC_UF1000,1000_QL80_.jpg",
-    description: "A touching story about a mother's love and values.",
-    rating: 4.7,
-  },
-  {
-    id: "yugandhar",
-    title: "Yugandhar",
-    author: "Shivaji Sawant",
-    price: 550,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVMBlkhEqsIn4I7qPj7VrbNZz6fFth-jCWYcfWareDzQ&s=10",
-    description: "A Marathi novel portraying the life, character, and journey of Lord Krishna.",
-    rating: 4.8,
-  },
-  {
-    id: "radheya",
-    title: "Radheya",
-    author: "Ranjit Desai",
-    price: 350,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs3QfB73uQ1UhyooFe_C5YoAICjJqNExhZERwWv2x6lA&s=10",
-    description: "A Marathi historical novel depicting the life, struggles, and emotions of Karna from the Mahabharata.",    
-    rating: 4.5,
-  },
-  {
-    id: "chhava",
-    title: "Chhava",
-    author: "Shivaji Sawant",
-    price: 450,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_a7AyxLbCd2jytZ2F-7yfptZoIvK4aslQsX9KRbmVfCJNZWM3DqssED5R&s=10",
-    description: "A historical Marathi novel depicting the courage, leadership, and struggles of Chhatrapati Sambhaji Maharaj.",
-    rating: 3.7,
-  },
-  {
-    id: "panipat",
-    title: "Panipat",
-    author: "Vishwas Patil",
-    price: 400,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMhbDKrac3EBg8pC2od-8ctSPOdJ1kxZuWOpNL8nmHPQHWBBhIBnYEI3Pc&s=10",
-    description: "A historical Marathi novel based on the Third Battle of Panipat and the bravery, sacrifices, and struggles of the Maratha forces.",
-    rating: 4.6,
-  }, 
-  {
-    id: "rau",
-    title: "Rau",
-    author: "N S Inamdar",
-    price: 350,
-    image: "https://upload.wikimedia.org/wikipedia/en/3/35/Front_cover_-_Rau_%28marathi_novel%29_1972.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
-    description: "A Marathi historical novel portraying the love story of Peshwa Bajirao I and Mastani, set against the history of the Maratha Empire.",
-    rating: 4.5,
-  },
-  {
-    id: "baluta",
-    title: "Baluta",
-    author: "Daya Pawar",
-    price: 300,
-    image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1338476136i/14741054.jpg",
-    description: "An autobiographical Marathi literary work by Daya Pawar that explores caste discrimination, social inequality, and the struggles of marginalized communities.",
-    rating: 3.8,
-  },
-  {
-    id: "smritichitre",
-    title: "Smritichitre",
-    author: "Lakshmibai Tilak",
-    price: 350,
-    image: "https://covers.storytel.com/jpg-640/9789353642389.9cee8c73-bb8e-437d-8660-8b36e54a84c6?optimize=high&quality=70&width=600",
-    description: "An autobiographical Marathi book by Lakshmibai Tilak describing her life experiences, family relationships, personal struggles, and social changes.",
-    rating: 4.6,
-  },
-  {
-    id: "pan-lakshyat-kon-gheto",
-    title: "Pan Lakshyat Kon Gheto",
-    author: "Hari Narayan Apte",
-    price: 250,
-    image: "https://m.media-amazon.com/images/I/615EmFqC+yL._AC_UF1000,1000_QL80_.jpg",
-    description: "A Marathi social novel by Hari Narayan Apte that explores family life, education, social customs, and the importance of awareness and responsibility.",
-    rating: 3.3,
-  }
-];
+   
+const selectedBook = data?.book;
 
-const selectedBook = books.find((book) => book.id === bookId);
+if (loading) {
+  return <p className="text-center mt-5">Loading book details...</p>
+}
+
+if (error) {
+  return <p className="text-center text-danger mt-5">{error}</p>
+}
 
     return (
         <>
@@ -199,4 +101,4 @@ const selectedBook = books.find((book) => book.id === bookId);
         </div>
         </>
     )
-}
+  }

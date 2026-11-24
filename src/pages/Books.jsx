@@ -3,6 +3,7 @@ import React, { useState, useContext } from 'react';
 import Navbar from '../components/Navbar';
 import CartContext from '../contexts/CartContext';
 import { Link, useLocation, useSearchParams, useNavigate } from 'react-router-dom';
+import useFetch from "../useFetch";
 
 
 export default function Books() {
@@ -19,6 +20,10 @@ export default function Books() {
 
     const { addToCart, addToWishlist } = useContext(CartContext);
 
+   const { data, loading, error } = useFetch(
+    "https://major-project-one-backend-omega.vercel.app/api/books"
+);
+
     const [ searchParams ] = useSearchParams();   
     const searchTerm = location.state?.searchTerm || searchParams.get("search") || "";
     const [ minRating, setMinRating ] = useState(location.state?.minRating || "All" );
@@ -31,128 +36,7 @@ export default function Books() {
     );
 
 
-    const books = [
-  {
-    id: 1,
-    slug: "mrutyunjay",
-    title: "Mrutyunjay",
-    author: "Shivaji Sawant",
-    category: "Mythological Fiction",
-    image: "https://www.majesticreaders.com/thumb/booksimg/450/600/14016/140160_PIC_1614492711.jpg",
-    price: 459,
-    rating: 4.8,
-  },
-  {
-    id: 2,
-    slug: "yayati",
-    title: "Yayati",
-    author: "V. S. Khandekar",
-    category: "Mythological Fiction",
-    image: "https://m.media-amazon.com/images/I/41pYblF83EL._AC_UF1000,1000_QL80_.jpg",
-    price: 232,
-    rating: 4.6,
-  },
-  {
-    id: 3,
-    slug: "shriman-yogi",
-    title: "Shriman Yogi",
-    author: "Ranjit Desai",
-    category: "Historical Fiction",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcTWR_z24PP0FjlGKdlMRgYtqFxEWiH8fFc3-WnBeuqi1CZK-4V_0hA0nC&s=10",
-    price: 740,
-    rating: 4.9,
-  },
-  {
-    id: 4,
-    slug: "shyamchi-aai",
-    title: "Shyamchi Aai",
-    author: "Sane Guruji",
-    category: "Autobiographical Literature",
-    image: "https://m.media-amazon.com/images/I/51IPv0Ps+wL._AC_UF1000,1000_QL80_.jpg",
-    price: 150,
-    rating: 4.7,
-  },
-  {
-    id: 5,
-    slug: "yugandhar",
-    title: "Yugandhar",
-    author: "Shivaji Sawant",
-    category: "Mythological Fiction",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVMBlkhEqsIn4I7qPj7VrbNZz6fFth-jCWYcfWareDzQ&s=10",
-    price: 550,
-    rating: 4.8,
-  },
-  {
-    id: 6,
-    slug: "radheya",
-    title: "Radheya",
-    author: "Ranjit Desai",
-    category: "Mythological Fiction",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs3QfB73uQ1UhyooFe_C5YoAICjJqNExhZERwWv2x6lA&s=10",
-    price: 350,
-    rating: 4.5,
-  },
-  {
-    id: 7,
-    slug: "chhava",
-    title: "Chhava",
-    author: "Shivaji Sawant",
-    category: "Historical Fiction",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_a7AyxLbCd2jytZ2F-7yfptZoIvK4aslQsX9KRbmVfCJNZWM3DqssED5R&s=10",
-    price: 450,
-    rating: 3.7,
-  },
-  {
-    id: 8,
-    slug: "panipat",
-    title: "Panipat",
-    author: "Vishwas Patil",
-    category: "Historical Fiction",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMhbDKrac3EBg8pC2od-8ctSPOdJ1kxZuWOpNL8nmHPQHWBBhIBnYEI3Pc&s=10",
-    price: 400,
-    rating: 4.6,
-  }, 
-  {
-    id: 9,
-    slug: "rau",
-    title: "Rau",
-    author: "N S Inamdar",
-    category: "Historical Fiction",
-    image: "https://upload.wikimedia.org/wikipedia/en/3/35/Front_cover_-_Rau_%28marathi_novel%29_1972.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
-    price: 350,
-    rating: 4.5,
-  },
-  {
-    id: 10,
-    slug: "baluta",
-    title: "Baluta",
-    author: "Daya Pawar",
-    category: "Autobiographical Literature",
-    image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1338476136i/14741054.jpg",
-    price: 300,
-    rating: 3.8,
-  },
-  {
-    id: 11,
-    slug: "smritichitre",
-    title: "Smritichitre",
-    author: "Lakshmibai Tilak",
-    category: "Autobiographical Literature",
-    image: "https://covers.storytel.com/jpg-640/9789353642389.9cee8c73-bb8e-437d-8660-8b36e54a84c6?optimize=high&quality=70&width=600",
-    price: 350,
-    rating: 4.6,
-  },
-  {
-    id: 12,
-    slug: "pan-lakshyat-kon-gheto",
-    title: "Pan Lakshyat Kon Gheto",
-    author: "Hari Narayan Apte",
-    category: "Autobiographical Literature",
-    image: "https://m.media-amazon.com/images/I/615EmFqC+yL._AC_UF1000,1000_QL80_.jpg",
-    price: 250,
-    rating: 3.3,
-  }
-];
+ const books = data?.books || [];
 
 const filteredBooks = books
   .filter((book) => {
@@ -177,6 +61,14 @@ const filteredBooks = books
 
     return 0;
   });
+
+  if (loading) {
+    return <p className="text-center mt-5">Loading books...</p>;
+}
+
+if (error) {
+    return <p className="text-center text-danger mt-5">{error}</p>;
+}
 
     return ( <>
     <Navbar />
