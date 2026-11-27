@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import React, { useState} from "react"
+import React, { useState, useEffect } from "react"
 
 
 export default function Profile() {
@@ -28,10 +28,55 @@ const [defaultAddress, setDefaultAddress] = useState(() => {
     return savedDefault ? JSON.parse(savedDefault) : null;
 });
 
-const [orders, setOrders] = useState(() => {
-    const savedOrders = localStorage.getItem("orders");
-    return savedOrders ? JSON.parse(savedOrders) : [];
-});
+const [orders, setOrders] = useState([]);
+
+useEffect(() => {
+    const fetchOrders = async () => {
+        try {
+            const response = await fetch("https://major-project-one-backend-omega.vercel.app/api/orders");
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || "Failed to fetch orders.");
+            }
+
+            setOrders(result.data.orders);
+        } catch (error) {
+            console.error("Error fetching orders:", error);
+            toast.error("Failed to load order history.");
+        }
+    };
+
+    fetchOrders();
+}, []);
+
+const deleteOrder = async (orderId) => {
+    try {
+        const response = await fetch(
+            `https://major-project-one-backend-omega.vercel.app/api/orders/${orderId}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Failed to delete order.");
+        }
+
+        setOrders((previousOrders) =>
+            previousOrders.filter((order) => order._id !== orderId)
+        );
+
+        toast.success("Order deleted successfully!");
+
+    } catch (error) {
+        console.error("Error deleting order:", error);
+        toast.error("Failed to delete order.");
+    }
+};
 
     return (
         <>
@@ -255,31 +300,115 @@ setEditingIndex(null);
     </div>
 ))}
             </div>
-            <div className="card shadow-sm border-0 rounded-4 p-4 mt-4">
-                <h4 className="fw-bold mb-3">Order History</h4>
+            
+<div className="card shadow-sm border-0 rounded-3 p-4 mt-4">
+    <div className="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 className="fw-bold mb-1">My Orders</h4>
+            <p className="text-muted mb-0">
+                Track and manage your purchases.
+            </p>
+        </div>
+        <span className="badge bg-primary rounded-pill px-3 py-2">
+            {orders.length} Orders
+        </span>
+    </div>
 
-                {
-                    orders.length === 0 ? (
-                        <p className="text-muted">You haven't placed any orders yet.</p>
-                    ) : (
-                        orders.map((order) => (
-                            <div key={order.orderId} className="border rounded-3 p-3 mb-3">
-                                <h6>Order ID: {order.orderId}</h6>
-                                <p>Order Date: {order.orderDate}</p>
-                                <p>Status: {order.status}</p>
-                                <p>Total Amount: ₹{order.totalPrice}</p>
+    {orders.length === 0 ? (
+        <div className="text-center py-5">
+            <h5 className="text-muted">No orders yet!</h5>
+            <p className="text-muted">
+                Your purchased books will appear here.
+            </p>
+        </div>
+    ) : (
+        orders.map((order) => (
+            <div
+                key={order._id}
+                className="border rounded-3 p-3 p-md-4 mb-3"
+            >
+                <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
+                    <div>
+                        <h6 className="fw-bold mb-2">
+                            Order #{order._id.slice(-8)}
+                        </h6>
+                        <small className="text-muted">
+                            Placed on:{" "}
+                            {new Date(order.createdAt).toLocaleDateString()}
+                        </small>
+                    </div>
 
-                                <h6>Books Purchased: </h6>
-                                {
-                                    order.books.map((book, index) => (
-                                        <p key={index} className="mb-1">{book.title} - ₹{book.price}</p>
-                                    ))
-                                }
-                            </div>
-                        ))
-                    )
-                }
+                    <div>
+                        <span className="badge bg-success-subtle text-success rounded-pill px-3 py-2">
+                            {order.status}
+                        </span>
+                    </div>
+                </div>
+
+                <hr />
+
+                <h6 className="fw-bold mb-3">Books Purchased</h6>
+
+                {order.books.map((item, index) => (
+                    <div
+                        key={index}
+                        className="d-flex align-items-center gap-3 mb-3"
+                    >
+                        <img
+                            src={item.bookId?.image}
+                            alt={item.bookId?.title || "Book"}
+                            className="rounded-3"
+                            style={{
+                                width: "65px",
+                                height: "85px",
+                                objectFit: "contain",
+                                borderRadius: "12px"
+                            }}
+                        />
+
+                        <div className="flex-grow-1">
+                            <h6 className="fw-bold mb-1">
+                                {item.bookId?.title || "Book unavailable"}
+                            </h6>
+                            <small className="text-muted">
+                                Quantity: {item.quantity}
+                            </small>
+                        </div>
+                    </div>
+                ))}
+
+                <hr />
+
+                <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+                    <div>
+                        <small className="text-muted">
+                            Total Amount
+                        </small>
+                        <h5 className="fw-bold text-success mb-0">
+                            ₹{order.totalPrice}
+                        </h5>
+                    </div>
+
+                    <button
+                        className="btn btn-outline-danger btn-sm"
+                        onClick={() => {
+                            const confirmDelete = window.confirm(
+                                "Are you sure you want to delete this order?"
+                            );
+
+                            if (confirmDelete) {
+                                deleteOrder(order._id);
+                            }
+                        }}
+                    >
+                        Delete Order
+                    </button>
+                </div>
             </div>
+        ))
+    )}
+</div>
+
         
         </div>
        

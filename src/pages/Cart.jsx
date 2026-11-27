@@ -36,7 +36,7 @@ export default function Cart() {
                 
                 {cart.map((book, index) => (
 
-                <div className='col-12' key={index}>
+                <div className='col-12' key={book.cartId}>
                     <div className='card border-0 shadow-sm rounded-4'>
                     <div className='card-body p-4'>
                         <div className='d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3'>
@@ -60,7 +60,7 @@ export default function Cart() {
                             <span className='fw-bold'>Quantity:</span>
                             <button className='btn btn-outline-secondary btn-sm' onClick={() => {
                                 if ((book.quantity || 1) > 1) {
-                                    updateQuantity(book.id, -1);
+                                    updateQuantity(book.cartId, -1);
                                     toast.info("Book quantity decreased.");
                                     } else {
                                         toast.warning("Minimum quantity is 1.");
@@ -68,7 +68,7 @@ export default function Cart() {
                                         }}>-</button>
                             <span className='fw-bold'>{book.quantity || 1}</span>
                             <button className='btn btn-outline-secondary btn-sm' onClick={() => {
-                                updateQuantity(book.id, 1);
+                                updateQuantity(book.cartId, 1);
                                 toast.success("Book quantity increased.");
                                 }}>+</button>
                         </div>
@@ -78,18 +78,22 @@ export default function Cart() {
                         <div className="d-flex flex-column gap-2">
                             <button
                             className="btn btn-outline-primary"
-                            onClick={() => {
-                                addToWishlist(book);
-                                removeFromCart(index);
-                                toast.success(`${book.title} moved to wishlist.`);
-                                }}
+                            onClick={async () => {
+                                try {
+                                    await addToWishlist(book);
+                                    await removeFromCart(book.cartId);
+                                    toast.success(`${book.title} moved to wishlist.`);
+                                    } catch (error) {
+                                        toast.error("Failed to add book to wishlist.");
+                                        }
+                                        }}
                                 >
                                     Add to Wishlist
                                     </button>
                                     <button
                                     className="btn btn-danger"
                                     onClick={() => {
-                                        removeFromCart(index);
+                                        removeFromCart(book.cartId);
                                         toast.success(`${book.title} removed from cart.`);
                                         }}
                                         >

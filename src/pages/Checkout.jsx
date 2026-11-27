@@ -24,7 +24,7 @@ export default function Checkout() {
     return savedAddresses ? JSON.parse(savedAddresses) : [];
 });
 
-    const { cart, setCart } = useContext(CartContext);
+    const { cart, removeFromCart } = useContext(CartContext);
 
     const totalPrice = cart.reduce(
     (total, book) => total + book.price * (book.quantity || 1),
@@ -45,7 +45,7 @@ const totalBooks = cart.reduce(
     });
 };
 
-const handlePlaceOrder = () => {
+const handlePlaceOrder = async () => {
 
     if(cart.length === 0) {
         toast.warning("Your cart is empty!");
@@ -78,10 +78,59 @@ const handlePlaceOrder = () => {
         return;
     }
 
-    toast.success("Order place successfully!");
-    
-    navigate("/order-success", { state: { customerInfo, cart, totalPrice } });
-    setCart([]); // Clear the cart after placing the order
+    try {
+    const response = await fetch("https://major-project-one-backend-omega.vercel.app/api/orders", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            customerInfo: {
+                name: customerInfo.name,
+                email: customerInfo.email,
+                phone: customerInfo.phone
+            },
+            deliveryAddress: {
+                address: customerInfo.address,
+                city: customerInfo.city,
+                pinCode: customerInfo.pincode
+            },
+            books: cart.map((book) => ({
+                bookId: book._id,
+                quantity: book.quantity || 1
+            }))
+        })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result.message || "Failed to place order.");
+    }
+
+    const cartCleanup = await Promise.allSettled(
+    cart.map((book) => removeFromCart(book.cartId))
+);
+
+if (cartCleanup.some((result) => result.status === "rejected")) {
+    toast.warning("Order placed, but some cart items could not be removed.");
+} else {
+    toast.success("Order placed successfully!");
+}
+
+    navigate("/order-success", {
+        state: {
+            customerInfo,
+            cart,
+            totalPrice,
+            order: result.data.order
+        }
+    });
+
+} catch (error) {
+    console.error("Error placing order:", error);
+    toast.error(error.message || "Something went wrong.");
+}
     
 }
 

@@ -52,7 +52,7 @@ export default function OrderSuccess() {
     }
     return (
         <>
-        <Navbar />
+        
         <div className="container my-4">
             <h2>Order Placed Successfully</h2>
             <p>Thank you <strong>{customerInfo.name}</strong> for your order!</p>

@@ -30,7 +30,7 @@ export default function Wishlist() {
                     <div className="row">
                         {
                             wishlist.map((book, index) => (
-                                <div className="col-md-3 mb-4" key={book.id}>
+                                <div className="col-md-3 mb-4" key={book.wishlistId}>
                                     <div className="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
                                         <div className="text-center bg-light p-3">
                                             <Link to={`/books/${book.slug}`}>
@@ -42,18 +42,29 @@ export default function Wishlist() {
                                             <p className="text-muted mb-2">By {book.author}</p>
                                             <h5 className="text-primary fw-bold mb-3">₹{book.price}</h5>
                                             <div className="d-grid gap-2">
-                                            <button className="btn btn-primary mt-2"  onClick={() => {
-                                                addToCart(book);
-                                                removeFromWishlist(index);
-                                                toast.success(`${book.title} moved to cart!`);
-                                                }}>Move to Cart</button>
+                                            <button className="btn btn-primary mt-2"  onClick={async () => {
+                                                try {
+                                                    await addToCart(book);
+                                                    await removeFromWishlist(book.wishlistId);
+                                                    toast.success(`${book.title} moved to cart!`);
+                                                    } catch (error) {
+                                                        toast.error("Failed to move book to cart.");
+                                                        }
+                                                        }}>Move to Cart</button>
                                                 
-                                            <button className="btn btn-danger" onClick={() => {
-                                                removeFromWishlist(index);
-                                                toast.success(`${book.title} removed from wishlist!`);
-                                                }}>
-                                                Remove from Wishlist
-                                            </button>
+                                            <button
+                                            className="btn btn-danger"
+                                            onClick={async () => {
+                                                try {
+                                                    await removeFromWishlist(book.wishlistId);
+                                                    toast.success(`${book.title} removed from wishlist!`);
+                                                    } catch (error) {
+                                                        toast.error("Failed to remove book from wishlist.");
+                                                        }
+                                                        }}
+                                                        >
+                                                            Remove from Wishlist
+                                                            </button>
                                             </div>
                                         </div>
                                     </div>
