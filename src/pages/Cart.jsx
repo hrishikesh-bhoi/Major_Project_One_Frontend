@@ -40,7 +40,7 @@ export default function Cart() {
                     <div className='card border-0 shadow-sm rounded-4'>
                     <div className='card-body p-4'>
                         <div className='row g-3 align-items-start'>
-                            <div className="col-4 col-sm-3">
+                            <div className="col-4 col-md-2">
                                 <div className="bg-light rounded-3 p-2">
                                 <Link to={`/books/${book.slug}`}>
                                   <img
@@ -55,7 +55,7 @@ export default function Cart() {
                             </Link>
                             </div>
                             </div>
-                            <div className="col-8 col-sm-9">
+                            <div className="col-8 col-md-4">
                         <h5 className='fw-bold'>{book.title}</h5>
                         <p className='text-muted mb-2'>Author: {book.author}</p>
                         <div className='d-flex align-items-center gap-3 my-3'>
@@ -77,9 +77,10 @@ export default function Cart() {
                         <h5 className='text-primary fw-bold'>Price: ₹{Number(book.price).toFixed(2)}</h5>
                         <h6 className="fw-bold text-success">Subtotal: ₹{(Number(book.price) * (book.quantity || 1)).toFixed(2)}</h6>
                             </div>
-                        <div className="d-flex flex-column gap-2">
+                        <div className="col-12 col-md-3">
+                            <div className="d-flex flex-column align-items-start gap-2 mt-3">
                             <button
-                            className="btn btn-outline-primary"
+                            className="btn btn-outline-primary w-100"
                             onClick={async () => {
                                 try {
                                     await addToWishlist(book);
@@ -93,7 +94,7 @@ export default function Cart() {
                                     Add to Wishlist
                                     </button>
                                     <button
-                                    className="btn btn-danger"
+                                    className="btn btn-danger w-100"
                                     onClick={() => {
                                         removeFromCart(book.cartId);
                                         toast.success(`${book.title} removed from cart.`);
@@ -101,7 +102,8 @@ export default function Cart() {
                                         >
                                             Remove
                                             </button>
-                                            </div>                     
+                                            </div>   
+                                            </div>                  
                         </div>
                     </div>
                 </div>
