@@ -39,8 +39,9 @@ export default function Cart() {
                 <div className='col-12' key={book.cartId}>
                     <div className='card border-0 shadow-sm rounded-4'>
                     <div className='card-body p-4'>
-                        <div className='d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3'>
-                            <div className='bg-light rounded-3 p-2'>
+                        <div className='row g-3 align-items-start'>
+                            <div className="col-4 col-sm-3">
+                                <div className="bg-light rounded-3 p-2">
                                 <Link to={`/books/${book.slug}`}>
                                   <img
                                 src={book.image}
@@ -53,7 +54,8 @@ export default function Cart() {
                             />
                             </Link>
                             </div>
-                            <div className='flex-grow-1'>
+                            </div>
+                            <div className="col-8 col-sm-9">
                         <h5 className='fw-bold'>{book.title}</h5>
                         <p className='text-muted mb-2'>Author: {book.author}</p>
                         <div className='d-flex align-items-center gap-3 my-3'>

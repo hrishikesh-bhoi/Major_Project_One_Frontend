@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-
+import { toast } from "react-toastify";
 import CartContext from "../contexts/CartContext";
 import { useParams, Link, useLocation } from "react-router-dom";
 import useFetch from "../useFetch";
@@ -8,7 +8,7 @@ import useFetch from "../useFetch";
 export default function BookDetails() {
   const location = useLocation();
 
-    const [ message, setMessage] = useState("");
+    
     const [ quantity, setQuantity ] = useState(1)
 
     const { bookId } = useParams();
@@ -62,27 +62,59 @@ if (error) {
                         <hr />
                         <h5 className="fw-bold">About this book</h5>
                         <p className="text-secondary lh-lg">{selectedBook.description}</p>
-                        {
-                            message && (
-                                <div className="alert alert-success mt-3" role="alert">
-                                    {message}
-                                </div>
-                            )
-                        }
                         <div className="d-flex align-items-center gap-3 my-4">
-                          <span className="fw-bold">Quantity: </span>
-                          <button className="btn btn-outline-secondary" onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-                          <span className="fw-bold">{quantity}</span>
-                          <button className="btn btn-outline-secondary" onClick={() => setQuantity(quantity + 1)}>+</button>
-                        </div>
+                          <span className="fw-bold">Quantity:</span>
+                          <button
+                          className="btn btn-outline-secondary"
+                          onClick={() => {
+                            if (quantity > 1) {
+                              setQuantity(quantity - 1);
+                              toast.info(`Quantity decreased to ${quantity - 1}`);
+                              } else {
+                                toast.warning("Minimum quantity is 1!");
+                                }
+                                }}
+                                >
+                                  -
+                                  </button>
+                                  <span className="fw-bold">{quantity}</span>
+                                  <button
+                                  className="btn btn-outline-secondary"
+                                  onClick={() => {
+                                    setQuantity(quantity + 1);
+                                    toast.info(`Quantity increased to ${quantity + 1}`);
+                                    }}
+                                    >
+                                      +
+                                      </button>
+                                      </div>
                         <div className="row g-2 mt-4">
                           <div className="col-md-12 col-sm-4">
-                        <button className="btn btn-primary btn-lg w-100" onClick={() => { addToCart(selectedBook, quantity); setMessage(`"${selectedBook.title}" has been added to your cart successfully !`); }}>Add to Cart</button>
+                        <button
+                        className="btn btn-primary btn-lg w-100"
+                        onClick={async () => {
+                          try {
+                            await addToCart(selectedBook, quantity);
+                            toast.success(`${selectedBook.title} added to cart!`);
+                            } catch (error) {
+                              toast.error("Failed to add book to cart.");
+                              }
+                              }}
+                              >Add to Cart</button>
 
                           </div>
                           <div className="col-md-12 col-sm-4">
-                            <button className="btn btn-outline-danger btn-lg w-100" 
-                        onClick={() => {addToWishlist(selectedBook); setMessage(`"${selectedBook.title}" added to your wishlist!`);}}>Add to Wishlist</button>
+                            <button
+                            className="btn btn-outline-danger btn-lg w-100"
+                            onClick={async () => {
+                              try {
+                                await addToWishlist(selectedBook);
+                                toast.success(`${selectedBook.title} added to wishlist!`);
+                                } catch (error) {
+                                  toast.error("Failed to add book to wishlist.");
+                                  }
+                                  }}
+                                  >Add to Wishlist</button>
 
                           </div>
                           <div className="col-md-12 col-sm-4">

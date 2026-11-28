@@ -12,12 +12,11 @@ export default function Books() {
   const navigate = useNavigate();
 
   const handleClearFilters = () => {
-    setSelectedCategory("All");
+    setSelectedCategories([]);
     setMinRating("All");
     setSortOrder("default");
-     navigate("/books", { replace: true });
-  };
-
+    navigate("/books", { replace: true });
+};
     const { addToCart, addToWishlist } = useContext(CartContext);
 
    const { data, loading, error } = useFetch(
@@ -30,10 +29,15 @@ export default function Books() {
     const [ sortOrder, setSortOrder ] = useState(location.state?.sortOrder || "default");
     
 
-    const [ selectedCategory, setSelectedCategory ] = useState(
-      location.state?.selectedCategory || 
-        searchParams.get("category") || "All"
+    const [selectedCategories, setSelectedCategories] = useState([]);
+
+    const handleCategoryChange = (category) => {
+    setSelectedCategories((previous) =>
+        previous.includes(category)
+            ? previous.filter((item) => item !== category)
+            : [...previous, category]
     );
+};
 
 
  const books = data?.books || [];
@@ -42,8 +46,7 @@ const filteredBooks = books
   .filter((book) => {
     const matchesSearch = book.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesCategory =
-      selectedCategory === "All" || book.category === selectedCategory;
+    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(book.category);
 
     const matchesRating =
       minRating === "All" || (minRating === "4" && book.rating >= 4) || (minRating === "3below" && book.rating < 4);
@@ -119,6 +122,7 @@ if (error) {
     </select>
   </div>
   {/* Category Filter */}
+{/* Category Filter */}
 <div className="mt-4">
     <h6 className="fw-bold mb-3">Category</h6>
 
@@ -131,12 +135,22 @@ if (error) {
         <div className="form-check mb-2" key={category}>
             <input
                 className="form-check-input"
-                type="radio"
-                name="category"
+                type="checkbox"
                 id={category}
-                checked={selectedCategory === category}
-                onChange={() => setSelectedCategory(category)}
+                checked={
+                    category === "All"
+                        ? selectedCategories.length === 0
+                        : selectedCategories.includes(category)
+                }
+                onChange={() => {
+                    if (category === "All") {
+                        setSelectedCategories([]);
+                    } else {
+                        handleCategoryChange(category);
+                    }
+                }}
             />
+
             <label className="form-check-label" htmlFor={category}>
                 {category}
             </label>
@@ -158,7 +172,7 @@ if (error) {
                     <div className="col-md-4 mb-4" key={book.id}>
                         <div className="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
                             <div className='text-center bg-light p-3'>
-                                <Link to={`/books/${book.slug}`} state={{selectedCategory, minRating, sortOrder, searchTerm}}>
+                                <Link to={`/books/${book.slug}`} state={{selectedCategories, minRating, sortOrder, searchTerm}}>
                                 <img src={book.image} alt={book.title} className='img-fluid' style={{height:"220px", width:"100%", objectFit:"contain"}}/>
                                 
                                 </Link>
