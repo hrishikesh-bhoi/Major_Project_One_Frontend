@@ -55,7 +55,7 @@ export default function Cart() {
                             </Link>
                             </div>
                             </div>
-                            <div className="col-8 col-md-4">
+                            <div className="col-8 col-md-6">
                         <h5 className='fw-bold'>{book.title}</h5>
                         <p className='text-muted mb-2'>Author: {book.author}</p>
                         <div className='d-flex align-items-center gap-3 my-3'>
